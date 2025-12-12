@@ -74,13 +74,13 @@ done
 jq "${jq_args[@]}" '$ARGS.named' > "$ACCESS_DB"
 
 # if httpauth enabled
-if [[ "$(bashio::config 'httpauth')" = true ]]
-then
-  bashio::log.info "HTTPAuth: enabled"
-  FLAGS="${FLAGS} --httpauth"
-else
-  bashio::log.notice "HTTPAuth: disabled"
-fi
+# if [[ "$(bashio::config 'httpauth')" = true ]]
+# then
+bashio::log.info "HTTPAuth: enabled"
+FLAGS="${FLAGS} --httpauth"
+# else
+#   bashio::log.notice "HTTPAuth: disabled"
+# fi
 
 # Add M3U_CUSTOM_HOST env
 if [[ "$(bashio::config 'm3u_custom_host')" ]]
