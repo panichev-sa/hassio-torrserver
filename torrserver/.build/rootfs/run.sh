@@ -73,14 +73,14 @@ for key in $(bashio::config "logins|keys"); do
 done
 jq "${jq_args[@]}" '$ARGS.named' > "$ACCESS_DB"
 
-if httpauth enabled
-if [[ "$(bashio::config 'httpauth')" = true ]]
-then
-  bashio::log.info "HTTPAuth: enabled"
-  FLAGS="${FLAGS} --httpauth"
-else
-  bashio::log.notice "HTTPAuth: disabled"
-fi
+# if httpauth enabled
+# if [[ "$(bashio::config 'httpauth')" = true ]]
+# then
+#   bashio::log.info "HTTPAuth: enabled"
+#   FLAGS="${FLAGS} --httpauth"
+# else
+#   bashio::log.notice "HTTPAuth: disabled"
+# fi
 
 Add M3U_CUSTOM_HOST env
 if [[ "$(bashio::config 'm3u_custom_host')" ]]
@@ -134,5 +134,5 @@ export GODEBUG="madvdontneed=1"
 bashio::log.info "Starting torrserver..."
 OBFUSCATED_FLAGS=$(echo $FLAGS | sed 's/\(--tgtoken=\)[^ ]*/\1*******/')
 bashio::log.info "torrserver ${OBFUSCATED_FLAGS}"
-#FLAGS="${FLAGS} --httpauth"
+FLAGS="${FLAGS} --httpauth"
 torrserver $FLAGS
