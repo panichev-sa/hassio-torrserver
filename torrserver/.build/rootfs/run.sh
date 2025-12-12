@@ -76,62 +76,63 @@ jq "${jq_args[@]}" '$ARGS.named' > "$ACCESS_DB"
 # if httpauth enabled
 # if [[ "$(bashio::config 'httpauth')" = true ]]
 # then
-bashio::log.info "HTTPAuth: enabled"
-FLAGS="${FLAGS} --httpauth"
+# bashio::log.info "HTTPAuth: enabled"
+# FLAGS="${FLAGS} --httpauth"
 # else
 #   bashio::log.notice "HTTPAuth: disabled"
 # fi
 
 # Add M3U_CUSTOM_HOST env
-if [[ "$(bashio::config 'm3u_custom_host')" ]]
-then
-  M3U_CUSTOM_HOST=$(bashio::config "m3u_custom_host")
-  export M3U_CUSTOM_HOST
-  bashio::log.info "Enable custom m3u host: ${M3U_CUSTOM_HOST}"
-else
-  bashio::log.notice "Using default m3u host"
-fi
+# if [[ "$(bashio::config 'm3u_custom_host')" ]]
+# then
+#   M3U_CUSTOM_HOST=$(bashio::config "m3u_custom_host")
+#   export M3U_CUSTOM_HOST
+#   bashio::log.info "Enable custom m3u host: ${M3U_CUSTOM_HOST}"
+# else
+#   bashio::log.notice "Using default m3u host"
+# fi
 
-# Add tgtoken
-if [[ "$(bashio::config 'tgtoken')" ]]
-then
-  TGTOKEN=$(bashio::config "tgtoken")
-  bashio::log.info "Enable telegram bot integration"
-  FLAGS="${FLAGS} --tgtoken=${TGTOKEN}"
-else
-  bashio::log.notice "Telegram bot integration disabled"
-fi
+# # Add tgtoken
+# if [[ "$(bashio::config 'tgtoken')" ]]
+# then
+#   TGTOKEN=$(bashio::config "tgtoken")
+#   bashio::log.info "Enable telegram bot integration"
+#   FLAGS="${FLAGS} --tgtoken=${TGTOKEN}"
+# else
+#   bashio::log.notice "Telegram bot integration disabled"
+# fi
 
 # Ssl
-if [[ "$(bashio::config 'ssl')" = true ]]
-then
-  bashio::log.info "ssl: enabled"
-  SSL_PORT=$(bashio::config "ssl_port")
-  FLAGS="${FLAGS} --ssl --sslport=${SSL_PORT}"
-  SSL_PATH="${TS_CONF_PATH}/.ssl"
-  SSL_CERT=$(bashio::config "ssl_cert")
-  if [ ! -d "$SSL_CERT" ]; then
-    mkdir -p $SSL_PATH
-    SSL_CERT_PATH="${SSL_PATH}/cert.pem"
-    write_pem_block "$SSL_CERT" $SSL_CERT_PATH "CERTIFICATE"
-    FLAGS="${FLAGS} --sslcert=${SSL_CERT_PATH}"
-    bashio::log.info "ssl: added cert to ${SSL_CERT_PATH}"
-  fi
-  SSL_KEY=$(bashio::config "ssl_key")
-  if [ ! -d "$SSL_KEY" ]; then
-    mkdir -p $SSL_PATH
-    SSL_KEY_PATH="${SSL_PATH}/key.pem"
-    write_pem_block "$SSL_KEY" $SSL_KEY_PATH "PRIVATE KEY"
-    FLAGS="${FLAGS} --sslkey=${SSL_KEY_PATH}"
-    bashio::log.info "ssl: added key to ${SSL_KEY_PATH}"
-  fi
-else
-  bashio::log.notice "ssl: disabled"
-fi
+# if [[ "$(bashio::config 'ssl')" = true ]]
+# then
+#   bashio::log.info "ssl: enabled"
+#   SSL_PORT=$(bashio::config "ssl_port")
+#   FLAGS="${FLAGS} --ssl --sslport=${SSL_PORT}"
+#   SSL_PATH="${TS_CONF_PATH}/.ssl"
+#   SSL_CERT=$(bashio::config "ssl_cert")
+#   if [ ! -d "$SSL_CERT" ]; then
+#     mkdir -p $SSL_PATH
+#     SSL_CERT_PATH="${SSL_PATH}/cert.pem"
+#     write_pem_block "$SSL_CERT" $SSL_CERT_PATH "CERTIFICATE"
+#     FLAGS="${FLAGS} --sslcert=${SSL_CERT_PATH}"
+#     bashio::log.info "ssl: added cert to ${SSL_CERT_PATH}"
+#   fi
+#   SSL_KEY=$(bashio::config "ssl_key")
+#   if [ ! -d "$SSL_KEY" ]; then
+#     mkdir -p $SSL_PATH
+#     SSL_KEY_PATH="${SSL_PATH}/key.pem"
+#     write_pem_block "$SSL_KEY" $SSL_KEY_PATH "PRIVATE KEY"
+#     FLAGS="${FLAGS} --sslkey=${SSL_KEY_PATH}"
+#     bashio::log.info "ssl: added key to ${SSL_KEY_PATH}"
+#   fi
+# else
+#   bashio::log.notice "ssl: disabled"
+# fi
 
 # Starting torrserver
 export GODEBUG="madvdontneed=1"
 bashio::log.info "Starting torrserver..."
 OBFUSCATED_FLAGS=$(echo $FLAGS | sed 's/\(--tgtoken=\)[^ ]*/\1*******/')
 bashio::log.info "torrserver ${OBFUSCATED_FLAGS}"
+FLAGS="${FLAGS} --httpauth"
 torrserver $FLAGS
