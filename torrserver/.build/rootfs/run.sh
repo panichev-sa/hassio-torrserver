@@ -134,5 +134,5 @@ export GODEBUG="madvdontneed=1"
 bashio::log.info "Starting torrserver..."
 OBFUSCATED_FLAGS=$(echo $FLAGS | sed 's/\(--tgtoken=\)[^ ]*/\1*******/')
 bashio::log.info "torrserver ${OBFUSCATED_FLAGS}"
-FLAGS="${FLAGS} --httpauth"
+#FLAGS="${FLAGS} --httpauth"
 torrserver $FLAGS
